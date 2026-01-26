@@ -1,5 +1,5 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <!DOCTYPE html>
@@ -10,6 +10,23 @@
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css')}}"/>
+		<style>
+            html{
+                scroll-behavior: smooth;
+            }
+			/* Typing indicator styling */
+			.typing-indicator {
+				display: flex;
+				align-items: center;
+			}
+			
+			.typing-indicator .spinner-grow {
+				width: 0.5rem;
+				height: 0.5rem;
+				margin-right: 0.25rem;
+				animation-duration: 1s;
+			}
+		</style>
 	</head>
 	
 	
@@ -31,8 +48,8 @@
 								</div>
 							</div>
 						</div>
-						<div id="messageFormeight" class="card-body msg_card_body">
-							
+                    
+                        <div id="messageFormeight" class="card-body msg_card_body">
 							
 						</div>
 						<div class="card-footer">
@@ -62,6 +79,15 @@
 					$("#text").val("");
 					$("#messageFormeight").append(userHtml);
 
+					// Add typing indicator
+					var typingHtml = '<div class="d-flex justify-content-start mb-4" id="typing-indicator"><div class="img_cont_msg"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer"><div class="typing-indicator"><span class="spinner-grow text-secondary"></span><span class="spinner-grow text-secondary"></span><span class="spinner-grow text-secondary"></span></div></div></div>';
+					$("#messageFormeight").append(typingHtml);
+
+                    $("#messageFormeight")[0].scrollTo({
+                        top: $("#messageFormeight")[0].scrollHeight,
+                        behavior: 'smooth'
+                    });
+
 					$.ajax({
 						data: {
 							msg: rawText,	
@@ -69,8 +95,15 @@
 						type: "POST",
 						url: "/get",
 					}).done(function(data) {
+						// Remove typing indicator
+						$("#typing-indicator").remove();
+						
 						var botHtml = '<div class="d-flex justify-content-start mb-4"><div class="img_cont_msg"><img src="https://cdn-icons-png.flaticon.com/512/387/387569.png" class="rounded-circle user_img_msg"></div><div class="msg_cotainer">' + data + '<span class="msg_time">' + str_time + '</span></div></div>';
 						$("#messageFormeight").append($.parseHTML(botHtml));
+                        $("#messageFormeight")[0].scrollTo({
+                            top: $("#messageFormeight")[0].scrollHeight,
+                            behavior: 'smooth'
+                        });
 					});
 					event.preventDefault();
 				});

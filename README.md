@@ -2,6 +2,8 @@
 
 A retrieval-augmented generation (RAG) chatbot that provides medical information by querying a knowledge base of medical documents using advanced language models.
 
+![Chatbot demo](assets/chatbot-demo.gif)
+
 ## Features
 
 - **RAG-Powered Responses**: Combines document retrieval with OpenAI's GPT-4 for accurate, context-aware medical information
